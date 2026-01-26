@@ -12,6 +12,7 @@ import { connectDB } from "./configs/database.js";
 import { Logger } from "./lib/logger.js";
 import { AUTH_ROUTER } from "./routes/auth.js";
 import { USER_ROUTER } from "./routes/user.js";
+import { CONNECTION_ROUTER } from "./routes/connection.js";
 
 const APP = express();
 APP.use(helmet());
@@ -21,6 +22,7 @@ APP.use(cookies());
 
 APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", USER_ROUTER);
+APP.use("/connection", CONNECTION_ROUTER);
 
 APP.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);
