@@ -40,6 +40,10 @@ APP.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+APP.get("/", (req: Request, res: Response) => {
+  res.send("Health OK!");
+});
+
 APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", USER_ROUTER);
 APP.use("/connection", CONNECTION_ROUTER);
