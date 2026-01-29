@@ -1,12 +1,8 @@
 import mongoose from "mongoose";
 
-interface IConnection {
-    fromUserId: mongoose.Types.ObjectId;
-    toUserId: mongoose.Types.ObjectId;
-    status: 'pending' | 'accepted' | 'rejected';
-}
+export const CONNECTION_STATUSES = ['interested', 'accepted', 'rejected','ignored'] as const;
 
-const connectionSchema = new mongoose.Schema<IConnection>({
+const connectionSchema = new mongoose.Schema({
     fromUserId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -19,9 +15,11 @@ const connectionSchema = new mongoose.Schema<IConnection>({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected'],
-        default: 'pending'
+        enum: CONNECTION_STATUSES,
+        required: true
     }
 }, { timestamps: true });
 
-export const Connection = mongoose.model<IConnection>('Connection', connectionSchema);
+connectionSchema.index({ fromUserId: 1, toUserId: 1 });
+
+export const Connection = mongoose.model('Connection', connectionSchema);

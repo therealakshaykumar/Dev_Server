@@ -37,7 +37,6 @@ ROUTER.post('/change-password', asyncHandler(async (req: Request, res: Response)
         return res.status(401).send("Password is incorrect");
     }
     const salt = await bcrypt.genSalt(10);
-    console.log(salt);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
     USER.password = hashedPassword;
     await USER.save();

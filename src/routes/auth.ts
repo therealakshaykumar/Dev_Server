@@ -63,7 +63,7 @@ ROUTER.post(
       return res.status(401).send("Invalid email address");
     }
 
-    const USER = await User.findOne({ email }).select("+password");
+    const USER = await User.findOne({ email }).select("+password").lean();
     if (!USER) {
       return res.status(401).send("Invalid credentials");
     }
@@ -74,10 +74,12 @@ ROUTER.post(
     }
 
     const TOKEN = await generateToken({ id: USER._id, isAdmin: USER.isAdmin });
+    const {password:p, ...userData} = USER;
 
     res.cookie("token", TOKEN, App.COOKIE_OPTIONS);
     res.status(200).json({
       message: "Login successful",
+      data: userData
     });
   }),
 );
