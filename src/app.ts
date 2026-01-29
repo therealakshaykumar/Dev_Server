@@ -65,18 +65,16 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // Initialize database and start server for local development
-if (process.env.NODE_ENV !== "production") {
-  connectDB()
-    .then(() => {
-      Logger.info(`🛢️  DB Connected Successfully 🛢️`);
-      APP.listen(App.PORT, () => {
-        Logger.info(`🔥 Sever is running on port : ${App.PORT} 🔥`);
-      });
-    })
-    .catch((err) => {
-      Logger.error("Error connecting DB 😕", err);
+connectDB()
+  .then(() => {
+    Logger.info(`🛢️  DB Connected Successfully 🛢️`);
+    APP.listen(App.PORT, () => {
+      Logger.info(`🔥 Sever is running on port : ${App.PORT} 🔥`);
     });
-}
+  })
+  .catch((err) => {
+    Logger.error("Error connecting DB 😕", err);
+  });
 
 export default APP;
 export { APP };
