@@ -1,17 +1,27 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".",
   "builds": [
     {
-      "src": "dist/index.js",
+      "src": "dist/app.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
+      "src": "/auth/(.*)",
+      "dest": "dist/app.js"
+    },
+    {
+      "src": "/user/(.*)",
+      "dest": "dist/app.js"
+    },
+    {
+      "src": "/connection/(.*)",
+      "dest": "dist/app.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "dist/index.js"
+      "dest": "dist/app.js"
     }
   ]
 }

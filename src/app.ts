@@ -27,6 +27,16 @@ APP.use(cors({
 APP.use(cookies());
 APP.use(RateLimiter);
 
+APP.use(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    Logger.error("Database connection failed", error);
+    res.status(500).json({ success: false, message: "Database connection failed" });
+  }
+});
+
 APP.use((req: Request, res: Response, next: NextFunction) => {
   const startTime = Date.now();
   
