@@ -19,7 +19,7 @@ export const Logger = winston.createLogger({
         })
     ),
     transports: [
-        App.LOG_TYPE === 'console' || process.env.NODE_ENV === 'production' ?
+        App.LOG_TYPE === 'console' ?
             new winston.transports.Console({
                 format: winston.format.combine(
                     winston.format.colorize(),
