@@ -48,17 +48,6 @@ APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", USER_ROUTER);
 APP.use("/connection", CONNECTION_ROUTER);
 
-connectDB()
-  .then(() => {
-    Logger.info(`🛢️  DB Connected Successfully 🛢️`);
-    APP.listen(App.PORT, () => {
-      Logger.info(`🔥 Sever is running on port : ${App.PORT} 🔥`);
-    });
-  })
-  .catch((err) => {
-    Logger.error("Error connecting DB 😕", err);
-  });
-
 APP.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);
   res.status(err.status || 500).json({
@@ -74,4 +63,21 @@ process.on("uncaughtException", (err) => {
 process.on("unhandledRejection", (reason, promise) => {
   Logger.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
+
+// Initialize database and start server for local development
+if (process.env.NODE_ENV !== "production") {
+  connectDB()
+    .then(() => {
+      Logger.info(`🛢️  DB Connected Successfully 🛢️`);
+      APP.listen(App.PORT, () => {
+        Logger.info(`🔥 Sever is running on port : ${App.PORT} 🔥`);
+      });
+    })
+    .catch((err) => {
+      Logger.error("Error connecting DB 😕", err);
+    });
+}
+
+export default APP;
+export { APP };
 
