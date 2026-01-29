@@ -2,11 +2,11 @@
   "name": "devtinder",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "tsc-watch --outDir ./dist --onSuccess \"node ./dist/app.js\"",
+    "dev": "tsc-watch --outDir ./dist --onSuccess \"node ./dist/index.js\"",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",

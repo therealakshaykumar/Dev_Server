@@ -64,18 +64,6 @@ process.on("unhandledRejection", (reason, promise) => {
   Logger.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
 
-// Initialize database and start server for local development
-connectDB()
-  .then(() => {
-    Logger.info(`🛢️  DB Connected Successfully 🛢️`);
-    APP.listen(App.PORT, () => {
-      Logger.info(`🔥 Sever is running on port : ${App.PORT} 🔥`);
-    });
-  })
-  .catch((err) => {
-    Logger.error("Error connecting DB 😕", err);
-  });
-
 export default APP;
 export { APP };
 

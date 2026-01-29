@@ -4,17 +4,14 @@
   "outputDirectory": "dist",
   "builds": [
     {
-      "src": "dist/app.js",
+      "src": "dist/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/app.js"
+      "dest": "dist/index.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
