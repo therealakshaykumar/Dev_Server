@@ -75,5 +75,3 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 export default APP;
-export { APP };
-
