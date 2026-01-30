@@ -17,11 +17,12 @@ import { RateLimiter } from "./lib/rate-limiter.js";
 import cors from 'cors';
 
 const APP = express();
+APP.set("trust proxy", 1);
 APP.use(helmet());
 APP.use(compression());
 APP.use(express.json());
 APP.use(cors({
-  origin: process.env.CORS_ORIGIN || ['http://localhost:5173'],
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
 APP.use(cookies());
