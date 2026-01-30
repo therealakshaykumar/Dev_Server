@@ -19,7 +19,6 @@ export const Logger = winston.createLogger({
         })
     ),
     transports: [
-        App.LOG_TYPE === 'console' ?
             new winston.transports.Console({
                 format: winston.format.combine(
                     winston.format.colorize(),
@@ -27,7 +26,6 @@ export const Logger = winston.createLogger({
                         return `${level} - ${timestamp} - ${message}`;
                     })
                 )
-            }) :
-            new winston.transports.File({ filename: 'logs/app.log' })
+            })
     ]
 })
