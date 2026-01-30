@@ -7,13 +7,13 @@ import helmet from "helmet";
 import compression from "compression";
 import cookies from "cookie-parser";
 
-import { App } from "./configs/creds.ts";
-import { connectDB } from "./configs/database.ts";
-import { Logger } from "./lib/logger.ts";
-import { AUTH_ROUTER } from "./routes/auth.ts";
-import { USER_ROUTER } from "./routes/user.ts";
-import { CONNECTION_ROUTER } from "./routes/connection.ts";
-import { RateLimiter } from "./lib/rate-limiter.ts";
+import { App } from "./configs/creds.js";
+import { connectDB } from "./configs/database.js";
+import { Logger } from "./lib/logger.js";
+import { AUTH_ROUTER } from "./routes/auth.js";
+import { USER_ROUTER } from "./routes/user.js";
+import { CONNECTION_ROUTER } from "./routes/connection.js";
+import { RateLimiter } from "./lib/rate-limiter.js";
 import cors from 'cors';
 
 const APP = express();
