@@ -5,7 +5,7 @@ dotenv.config({
 });
 
 export namespace App{
-    export const PORT = process.env.PORT || 3000
+    export const PORT = process.env.PORT || 7777
     export const LOG_TYPE = process.env.LOG_TYPE || 'console'
     export const JWT_SECRET = process.env.JWT_SECRET
     export const EXPIRES_IN = "7d"
