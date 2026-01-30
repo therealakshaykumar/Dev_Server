@@ -1,13 +1,5 @@
 import winston from "winston";
-import { App } from "../configs/creds.js";
-import fs from "fs";
-import path from "path";
 
-// Create logs directory if it doesn't exist
-const logsDir = 'logs';
-if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir, { recursive: true });
-}
 
 export const Logger = winston.createLogger({
     level: 'info',
