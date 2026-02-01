@@ -7,8 +7,6 @@ import { Logger } from "../lib/logger.js";
 
 export const userAuth = async (req:Request, res:Response, next:NextFunction) => {
     try {
-        console.log("All cookies:", req.cookies);
-        console.log("Headers:", req.headers.cookie);
         const {token} = req.cookies;
         if(!token){
             return res.status(401).send("Unauthorized: No token provided");

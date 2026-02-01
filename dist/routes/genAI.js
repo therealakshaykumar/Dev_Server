@@ -7,10 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from 'mongoose';
-import { DB } from './creds.js';
-export function connectDB() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield mongoose.connect(DB.MONGO_URI);
-    });
-}
+import { Router } from 'express';
+import { asyncHandler } from '../middlewares/wrapper.js';
+import { generateBioPrompt } from '../lib/genAI.js';
+import { userAuth } from '../middlewares/auth.js';
+const ROUTER = Router();
+ROUTER.use(userAuth);
+ROUTER.post('/generate-bio', asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { firstName, lastName, gender, dob } = req.body;
+    const bio = yield generateBioPrompt(firstName, lastName, dob, gender);
+    res.json({ bio });
+})));
+export const GENAI_ROUTER = ROUTER;

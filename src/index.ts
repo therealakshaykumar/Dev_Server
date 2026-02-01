@@ -15,6 +15,7 @@ import { USER_ROUTER } from "./routes/user.js";
 import { CONNECTION_ROUTER } from "./routes/connection.js";
 import { RateLimiter } from "./lib/rate-limiter.js";
 import cors from 'cors';
+import { GENAI_ROUTER } from "./routes/genAI.js";
 
 const APP = express();
 APP.set("trust proxy", 1);
@@ -22,21 +23,11 @@ APP.use(helmet());
 APP.use(compression());
 APP.use(express.json());
 APP.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://gitogether.vercel.app'],
   credentials: true,
 }));
 APP.use(cookies());
 APP.use(RateLimiter);
-
-APP.use(async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await connectDB();
-    next();
-  } catch (error) {
-    Logger.error("Database connection failed", error);
-    res.status(500).json({ success: false, message: "Database connection failed" });
-  }
-});
 
 APP.use((req: Request, res: Response, next: NextFunction) => {
   const startTime = Date.now();
@@ -51,6 +42,7 @@ APP.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+
 APP.get("/", (req: Request, res: Response) => {
   res.send("Health OK!");
 });
@@ -58,6 +50,7 @@ APP.get("/", (req: Request, res: Response) => {
 APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", USER_ROUTER);
 APP.use("/connection", CONNECTION_ROUTER);
+APP.use("/ai", GENAI_ROUTER);
 
 APP.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

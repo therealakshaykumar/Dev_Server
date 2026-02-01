@@ -42,7 +42,34 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         select: false,
-    }
+    },
+    imageUrl: {
+        type: String,
+        trim: true,
+        required: false,
+        default: "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg",
+        maxLength: 500,
+    },
+    dob: {
+        type: Date,
+        required: false,
+    },
+    gender: {
+        type: String,
+        enum: ['Male', 'Female', 'Other'],
+        required: false,
+    },
+    bio: {
+        type: String,
+        trim: true,
+        maxLength: 500,
+        required: false,
+    },
+    imagePublicId: {
+        type: String,
+        trim: true,
+        required: false,
+    },
 }, { timestamps: true, });
 
 export const User = mongoose.model('User', userSchema);

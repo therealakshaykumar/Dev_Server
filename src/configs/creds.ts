@@ -21,3 +21,13 @@ export namespace App{
 export namespace DB{
     export const MONGO_URI = process.env.MONGO_URI
 }
+
+export namespace Cloudinary{
+    export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || ''
+    export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || ''
+    export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || ''
+}
+
+export namespace GenAI{
+    export const GENAI_API_KEY = process.env.GENAI_API_KEY || ''
+}

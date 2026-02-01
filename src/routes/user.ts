@@ -3,6 +3,8 @@ import { User } from "../models/user.js";
 import { asyncHandler } from "../middlewares/wrapper.js";
 import { adminAuth, userAuth } from "../middlewares/auth.js";
 import bcrypt from "bcrypt";
+import { upload } from "../lib/multer.js";
+import { deleteFromCloudinary, uploadToCloudinary } from "../lib/cloudinary.js";
 
 const ROUTER = Router();
 ROUTER.use(userAuth);
@@ -43,5 +45,31 @@ ROUTER.post('/change-password', asyncHandler(async (req: Request, res: Response)
     res.status(200).json({ message: "Password changed successfully" });
 }));
 
+ROUTER.patch('/profile',upload.single('image'),asyncHandler(async (req: Request, res: Response) => {
+    const {firstName,lastName,imageUrl,dob,gender,bio} = req.body;
+    const updateData: any = {
+        firstName,
+        lastName,
+        bio,
+        gender,
+        dob,
+    };
+    if (req.file) {
+        const currentUser = await User.findById(req.userId);
+        
+        if (currentUser?.imagePublicId) {
+            await deleteFromCloudinary(currentUser.imagePublicId);
+        }
+
+        const { url, publicId } = await uploadToCloudinary(req.file.buffer);
+        updateData.imageUrl = url;
+        updateData.imagePublicId = publicId;
+    }
+    const USER = await User.findByIdAndUpdate(req.userId, updateData, { new: true }).select("-password -__v");
+    if (!USER) {
+        return res.status(404).send("User not found");
+    }
+    res.json(USER);
+}));
 
 export const USER_ROUTER = ROUTER;

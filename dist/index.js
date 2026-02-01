@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import express from "express";
 import helmet from "helmet";
 import compression from "compression";
@@ -10,26 +19,18 @@ import { USER_ROUTER } from "./routes/user.js";
 import { CONNECTION_ROUTER } from "./routes/connection.js";
 import { RateLimiter } from "./lib/rate-limiter.js";
 import cors from 'cors';
+import { GENAI_ROUTER } from "./routes/genAI.js";
 const APP = express();
+APP.set("trust proxy", 1);
 APP.use(helmet());
 APP.use(compression());
 APP.use(express.json());
 APP.use(cors({
-    origin: process.env.CORS_ORIGIN || ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://gitogether.vercel.app'],
     credentials: true,
 }));
 APP.use(cookies());
 APP.use(RateLimiter);
-APP.use(async (req, res, next) => {
-    try {
-        await connectDB();
-        next();
-    }
-    catch (error) {
-        Logger.error("Database connection failed", error);
-        res.status(500).json({ success: false, message: "Database connection failed" });
-    }
-});
 APP.use((req, res, next) => {
     const startTime = Date.now();
     res.on('finish', () => {
@@ -46,6 +47,7 @@ APP.get("/", (req, res) => {
 APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", USER_ROUTER);
 APP.use("/connection", CONNECTION_ROUTER);
+APP.use("/ai", GENAI_ROUTER);
 APP.use((err, req, res, next) => {
     console.log(err);
     res.status(err.status || 500).json({
@@ -53,9 +55,9 @@ APP.use((err, req, res, next) => {
         message: err.message || "Internal Server Error",
     });
 });
-const startServer = async () => {
+const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        await connectDB();
+        yield connectDB();
         Logger.info("Database connection successful");
     }
     catch (error) {
@@ -65,7 +67,7 @@ const startServer = async () => {
     APP.listen(App.PORT, () => {
         Logger.info(`Server is running on port ${App.PORT}`);
     });
-};
+});
 startServer();
 process.on("uncaughtException", (err) => {
     Logger.error("There was an uncaught error", err);

@@ -65,7 +65,7 @@ ROUTER.post(
 
     const USER = await User.findOne({ email }).select("+password").lean();
     if (!USER) {
-      return res.status(401).send("Invalid credentials");
+      throw new Error("Invalid credentials");
     }
 
     const IS_VALID_PASSWORD = await bcrypt.compare(password, USER.password);

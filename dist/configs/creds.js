@@ -10,8 +10,9 @@ export var App;
     App.EXPIRES_IN = "7d";
     App.COOKIE_OPTIONS = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
+        path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 })(App || (App = {}));
@@ -19,3 +20,13 @@ export var DB;
 (function (DB) {
     DB.MONGO_URI = process.env.MONGO_URI;
 })(DB || (DB = {}));
+export var Cloudinary;
+(function (Cloudinary) {
+    Cloudinary.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || '';
+    Cloudinary.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || '';
+    Cloudinary.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || '';
+})(Cloudinary || (Cloudinary = {}));
+export var GenAI;
+(function (GenAI) {
+    GenAI.GENAI_API_KEY = process.env.GENAI_API_KEY || '';
+})(GenAI || (GenAI = {}));
