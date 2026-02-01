@@ -85,7 +85,7 @@ ROUTER.post(
 );
 
 ROUTER.post('/logout', asyncHandler(async (req: Request, res: Response) => {
-    res.clearCookie('token');
+    res.clearCookie('token', App.COOKIE_OPTIONS);
     res.status(200).json({ message: 'Logout successful' });
 }));
 

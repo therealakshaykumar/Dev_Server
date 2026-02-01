@@ -85,7 +85,7 @@ ROUTER.post("/login", asyncHandler((req, res) => __awaiter(void 0, void 0, void 
     });
 })));
 ROUTER.post('/logout', asyncHandler((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.clearCookie('token');
+    res.clearCookie('token', App.COOKIE_OPTIONS);
     res.status(200).json({ message: 'Logout successful' });
 })));
 export const AUTH_ROUTER = ROUTER;
