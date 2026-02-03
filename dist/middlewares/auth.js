@@ -14,7 +14,7 @@ export const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         const { token } = req.cookies;
         if (!token) {
-            return res.status(401).send("Unauthorized: No token provided");
+            return res.status(401).send("Unauthorized: Please login or signup to continue.");
         }
         const decoded = yield verifyToken(token);
         if (!decoded) {
@@ -32,7 +32,7 @@ export const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     try {
         const { token } = req.cookies;
         if (!token) {
-            return res.status(401).send("Unauthorized: No token provided");
+            return res.status(401).send("Unauthorized: Please login or signup to continue.");
         }
         const decoded = yield verifyToken(token);
         if (!decoded) {

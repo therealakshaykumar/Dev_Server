@@ -9,7 +9,7 @@ export const userAuth = async (req:Request, res:Response, next:NextFunction) => 
     try {
         const {token} = req.cookies;
         if(!token){
-            return res.status(401).send("Unauthorized: No token provided");
+            return res.status(401).send("Unauthorized: Please login or signup to continue.");
         }
         const decoded = await verifyToken(token) as AnyObject;
         if(!decoded){
@@ -27,7 +27,7 @@ export const adminAuth = async (req:Request, res:Response, next:NextFunction) =>
     try {
         const {token} = req.cookies;
         if(!token){
-            return res.status(401).send("Unauthorized: No token provided");
+            return res.status(401).send("Unauthorized: Please login or signup to continue.");
         }
         const decoded = await verifyToken(token) as AnyObject;
         if(!decoded){
