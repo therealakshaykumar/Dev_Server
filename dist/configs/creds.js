@@ -12,7 +12,7 @@ export var App;
     const isProduction = App.NODE_ENV === 'production';
     App.COOKIE_OPTIONS = {
         httpOnly: true,
-        secure: isProduction,
+        secure: false,
         sameSite: "none",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
