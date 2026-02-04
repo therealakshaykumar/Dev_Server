@@ -7,10 +7,12 @@ export var App;
     App.PORT = process.env.PORT || 7777;
     App.LOG_TYPE = process.env.LOG_TYPE || 'console';
     App.JWT_SECRET = process.env.JWT_SECRET;
+    App.NODE_ENV = process.env.NODE_ENV;
     App.EXPIRES_IN = "7d";
+    const isProduction = App.NODE_ENV === 'production';
     App.COOKIE_OPTIONS = {
         httpOnly: true,
-        secure: true,
+        secure: isProduction,
         sameSite: "none",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,

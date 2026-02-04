@@ -8,10 +8,12 @@ export namespace App{
     export const PORT = process.env.PORT || 7777
     export const LOG_TYPE = process.env.LOG_TYPE || 'console'
     export const JWT_SECRET = process.env.JWT_SECRET
+    export const NODE_ENV = process.env.NODE_ENV
     export const EXPIRES_IN = "7d"
+    const isProduction = NODE_ENV === 'production';
     export const COOKIE_OPTIONS = {
       httpOnly: true,
-      secure: true,
+      secure: isProduction,
       sameSite: "none" as const,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
