@@ -16,6 +16,7 @@ import { CONNECTION_ROUTER } from "./routes/connection.js";
 import { RateLimiter } from "./lib/rate-limiter.js";
 import cors from 'cors';
 import { GENAI_ROUTER } from "./routes/genAI.js";
+import { CORS_URL } from "./configs/constants.js";
 
 const APP = express();
 APP.set("trust proxy", 1);
@@ -23,7 +24,7 @@ APP.use(helmet());
 APP.use(compression());
 APP.use(express.json());
 APP.use(cors({
-  origin: ['http://localhost:5173', 'https://gitogether.vercel.app','http://13.234.232.87'],
+  origin: CORS_URL,
   credentials: true,
 }));
 APP.use(cookies());
