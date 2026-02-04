@@ -23,7 +23,7 @@ APP.use(helmet());
 APP.use(compression());
 APP.use(express.json());
 APP.use(cors({
-  origin: ['http://localhost:5173', 'https://gitogether.vercel.app'],
+  origin: ['http://localhost:5173', 'https://gitogether.vercel.app','http://13.234.232.87'],
   credentials: true,
 }));
 APP.use(cookies());
