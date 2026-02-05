@@ -14,7 +14,7 @@ export namespace App{
     export const COOKIE_OPTIONS = {
       httpOnly: true,
       secure: false,
-      sameSite: "none" as const,
+      sameSite: "lax" as const,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     } as CookieOptions;
