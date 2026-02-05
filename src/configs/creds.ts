@@ -13,8 +13,8 @@ export namespace App{
     const isProduction = NODE_ENV === 'production';
     export const COOKIE_OPTIONS = {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax" as const,
+      secure: true,
+      sameSite: "strict" as const,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     } as CookieOptions;
