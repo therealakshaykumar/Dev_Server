@@ -39,16 +39,12 @@ ROUTER.post("/connect/:status/:toUserId", asyncHandler(async (req: Request, res:
     if(EXISTING_CONNECTION){
         return res.status(400).json({ message: "Connection request already exists"});
     }
-    console.time("findConnection");
-
     const CONNECTION = new Connection({
         fromUserId: req.userId,
         toUserId: toUserId,
         status: status
     })
     await CONNECTION.save();
-    console.timeEnd("findConnection");
-
     res.status(200).json({ message: `Connection ${status}`});
 }));
 
