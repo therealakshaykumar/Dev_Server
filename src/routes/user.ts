@@ -54,6 +54,7 @@ ROUTER.patch('/profile',upload.single('image'),asyncHandler(async (req: Request,
         gender,
         dob,
     };
+    if(new Date(dob) > new Date()) throw new Error("Date of birth cannot be a future date")
     if (req.file) {
         const currentUser = await User.findById(req.userId);
         
