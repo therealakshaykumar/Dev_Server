@@ -12,6 +12,7 @@ export async function generateBioPrompt(firstName: string, lastName: string, dob
     Age: ${dob} get age from date of birth.
     Gender: ${gender}
     The bio should be concise, interesting, and reflect the user's personality.
+    Add some funny elements, similar known faces
     Return only the bio text without any additional information or formatting.`;
     const response = await AI.models.generateContent({
         model: "gemini-3-flash-preview",
