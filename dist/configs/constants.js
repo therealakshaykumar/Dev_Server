@@ -1,1 +1,0 @@
-export const CORS_URL = ['http://localhost:5173', 'https://gitogether.vercel.app', 'http://13.234.232.87', 'http://13.234.232.87:7777', 'http://13.234.232.87/api'];
