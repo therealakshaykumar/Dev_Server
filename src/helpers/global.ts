@@ -33,7 +33,7 @@ export const globalErrorHandler = async (err: any, req: Request, res: Response, 
 }
 
 
-export const startServer = async (server: Server<typeof IncomingMessage, typeof ServerResponse>,port:number) => {
+export const startServer = async (server: Server,port:number) => {
   try {
     await connectDB();
     Logger.info("🔥 Database connection successful");
