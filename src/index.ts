@@ -4,7 +4,6 @@ import compression from "compression";
 import cookies from "cookie-parser";
 import { createServer } from "http";
 import cors from "cors";
-import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 
 import { App } from "./configs/creds.js";
@@ -35,7 +34,6 @@ APP.use(helmet(HELMET_OPTIONS));
 APP.use(compression(COMPRESSION_OPTIONS));
 APP.use(express.json(JSON_OPTIONS));
 APP.use(express.urlencoded({ extended: true, limit: "10kb" }));
-APP.use(mongoSanitize());
 APP.use(hpp());
 APP.use(cors(CORS_OPTIONS));
 APP.use(cookies());
