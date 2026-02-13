@@ -28,7 +28,6 @@ import {
 } from "./helpers/global.js";
 
 const APP = express();
-const SERVER = createServer(APP);
 
 APP.set("trust proxy", 1);
 
@@ -52,6 +51,7 @@ APP.use("/ai", apiLimiter, GENAI_ROUTER);
 
 APP.use(globalErrorHandler);
 
+const SERVER = createServer(APP);
 startServer(SERVER, Number(App.PORT));
 
 process.on("uncaughtException", (err) => {
