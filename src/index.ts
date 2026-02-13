@@ -52,7 +52,7 @@ APP.use("/ai", apiLimiter, GENAI_ROUTER);
 
 APP.use(globalErrorHandler);
 
-startServer(SERVER, App.PORT);
+startServer(SERVER, Number(App.PORT));
 
 process.on("uncaughtException", (err) => {
   Logger.error("There was an uncaught error", err);
