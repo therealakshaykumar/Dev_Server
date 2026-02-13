@@ -147,4 +147,47 @@ ROUTER.get('/feed', asyncHandler(async (req: Request, res: Response) => {
     });
 }));
 
+ROUTER.get('/review-ignored', asyncHandler(async (req: Request, res: Response) => {
+    if (!req.userId) {
+        throw new Error("Missing user identification");
+    }
+    const REVIEWS = await Connection.find({
+        toUserId: String(req.userId),
+        status: 'ignored'
+    })
+    .populate('fromUserId', '-password -__v')
+    .populate('toUserId', '-password -__v')
+    .lean();
+
+    res.status(200).json({ reviews: REVIEWS });
+}));
+
+ROUTER.post('/reviews/:status/:requestId', asyncHandler(async (req: Request, res: Response) => {
+    const { status, requestId } = req.params;
+
+    const validStatuses = ['accepted', 'rejected'];
+    if (!validStatuses.includes(String(status))) {
+        return res.status(400).json({ message: "Invalid connection status" });
+    }
+
+    if (!req.userId || !requestId) {
+        throw new Error("Missing user identification");
+    }
+
+    // ✅ Find ignored request where current user is the receiver
+    const CONNECTION = await Connection.findOne({
+        _id: String(requestId),
+        toUserId: String(req.userId),
+        status: 'ignored'
+    });
+
+    if (!CONNECTION) {
+        return res.status(404).json({ message: "Connection request not found" });
+    }
+
+    CONNECTION.status = status as any;
+    await CONNECTION.save();
+    res.status(200).json({ message: `Connection ${status}` });
+}));
+
 export const CONNECTION_ROUTER = ROUTER;
