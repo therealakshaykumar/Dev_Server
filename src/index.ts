@@ -25,6 +25,7 @@ import {
   healthCheck,
   startServer,
 } from "./helpers/global.js";
+import { CHAT_ROUTER } from "./routes/chat.js";
 
 const APP = express();
 
@@ -42,10 +43,11 @@ APP.use(globalLimiter);
 APP.get("/", healthCheck);
 
 APP.use(getSlowAPI);
-APP.use("/auth", authLimiter, AUTH_ROUTER);
+APP.use("/auth", AUTH_ROUTER);
 APP.use("/user", apiLimiter, USER_ROUTER);
 APP.use("/connection", apiLimiter, CONNECTION_ROUTER);
 APP.use("/ai", apiLimiter, GENAI_ROUTER);
+APP.use("/chat", apiLimiter, CHAT_ROUTER);
 
 APP.use(globalErrorHandler);
 

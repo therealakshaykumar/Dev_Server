@@ -57,6 +57,9 @@ ROUTER.post('/review/:status/:requestId', asyncHandler(async (req: Request, res:
     if (!req.userId || !requestId) {
         throw new Error("Missing user identification");
     }
+    if (!mongoose.Types.ObjectId.isValid(String(requestId))) {
+        return res.status(400).json({ message: "Invalid request ID format" });
+    }
     const CONNECTION = await Connection.findOne({
         _id: requestId,
         toUserId: req.userId,
@@ -91,7 +94,12 @@ ROUTER.get('/connections', asyncHandler(async (req: Request, res: Response) => {
             { toUserId: req.userId, status: 'accepted' }
         ]
     } as any).populate('fromUserId', '-password -__v').populate('toUserId', '-password -__v').lean();
-    res.status(200).json({ connections: CONNECTIONS });
+    const connections = CONNECTIONS.map((conn) => {
+        return String(conn.fromUserId._id) === String(req.userId)
+            ? conn.toUserId
+            : conn.fromUserId;
+    });
+    res.status(200).json({ connections: connections });
 }));
 
 ROUTER.get('/feed', asyncHandler(async (req: Request, res: Response) => {
