@@ -46,7 +46,8 @@ export const initSocket = async (server: Server) => {
           senderId: data.user,
           text: data.message,
         });
-        console.log(chat);
+        // console.log(chat);
+        await chat.save()
         IO.to(ROOM_ID).emit("newMessage", {
           id: data.user,
           message: data.message,

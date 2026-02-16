@@ -21,6 +21,7 @@ export const healthCheck = async (req: Request, res: Response) => {
 }
 
 export const globalErrorHandler = async (err: any, req: Request, res: Response, next: NextFunction) => {
+  if(process.env.NODE_ENV !== "production") console.log(err)
   Logger.error(`Error: ${err.message}`, { path: req.path, method: req.method });
   const message =
     process.env.NODE_ENV === "production"
