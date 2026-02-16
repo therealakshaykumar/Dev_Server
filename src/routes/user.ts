@@ -14,6 +14,12 @@ ROUTER.get("/users", adminAuth, asyncHandler(async (req: Request, res: Response)
     res.json(USERS);
 }));
 
+ROUTER.get("/profile/:userId", asyncHandler(async (req: Request, res: Response) => {
+    const {userId} = req.params;
+    const USER = await User.findById(String(userId)).select("-__v").lean();
+    res.json(USER);
+}));
+
 ROUTER.get("/profile", asyncHandler(async (req: Request, res: Response) => {
     const USER = await User.findById(req.userId).select("-password -__v").lean();   
     if (!USER) {
