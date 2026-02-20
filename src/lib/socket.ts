@@ -21,7 +21,7 @@ export const initSocket = async (server: Server) => {
       origin: CORS_URL,
       credentials: true,
     },
-    transports: ["websocket"],
+    transports: ["websocket",'polling'],
     cookie: false,
     pingTimeout: 60000,
     pingInterval: 25000,
