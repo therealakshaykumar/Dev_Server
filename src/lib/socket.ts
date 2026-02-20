@@ -21,6 +21,10 @@ export const initSocket = async (server: Server) => {
       origin: CORS_URL,
       credentials: true,
     },
+    transports: ["websocket"],
+    cookie: false,
+    pingTimeout: 60000,
+    pingInterval: 25000,
   });
 
   IO.on("connection", (socket) => {
@@ -47,7 +51,7 @@ export const initSocket = async (server: Server) => {
           text: data.message,
         });
         // console.log(chat);
-        await chat.save()
+        await chat.save();
         IO.to(ROOM_ID).emit("newMessage", {
           id: data.user,
           message: data.message,
