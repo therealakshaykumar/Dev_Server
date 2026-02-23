@@ -8,63 +8,72 @@ import crypto from "crypto";
 let IO: SocketIOServer;
 
 const getRoomID = (fromID: string, toID: string) => {
-  const id = crypto
-    .createHash("sha256")
-    .update([fromID, toID].sort().join("#"))
-    .digest("hex");
-  return id;
+    const id = crypto
+        .createHash("sha256")
+        .update([fromID, toID].sort().join("#"))
+        .digest("hex");
+    return id;
 };
 
 export const initSocket = async (server: Server) => {
-  IO = new SocketIOServer(server, {
-    cors: {
-      origin: CORS_URL,
-      credentials: true,
-    },
-    cookie: false,
-    pingTimeout: 60000,
-    pingInterval: 25000,
-  });
+    IO = new SocketIOServer(server, {
+        cors: {
+            origin: CORS_URL,
+            credentials: true,
+            methods: ["GET", "POST"]
+        },
+        // ✅ FIX: Allow both transports
+        transports: ["websocket", "polling"],
+        allowUpgrades: true,
 
-  IO.on("connection", (socket) => {
-    socket.on("joinChat", (data) => {
-      const ROOM_ID = getRoomID(data.user, data.toId);
-      socket.join(ROOM_ID);
+        // ✅ Default path
+        path: "/socket.io/",
+
+        cookie: false,
+        pingTimeout: 60000,
+        pingInterval: 25000,
     });
 
-    socket.on("sendMessage", async (data) => {
-      const ROOM_ID = getRoomID(data.user, data.toId);
+    IO.on("connection", (socket) => {
+        Logger.info(`✅ Client connected: ${socket.id}`);
+
+        socket.on("joinChat", (data) => {
+            const ROOM_ID = getRoomID(data.user, data.toId);
+            socket.join(ROOM_ID);
+            Logger.info(`Joined room: ${ROOM_ID}`);
+        });
+
+        socket.on("sendMessage", async (data) => {
+            const ROOM_ID = getRoomID(data.user, data.toId);
       console.log(data.message);
-      try {
-        let chat = await Chat.findOne({
-          participants: { $all: [data.user, data.toId] },
+            try {
+                let chat = await Chat.findOne({
+                    participants: { $all: [data.user, data.toId] },
+                });
+                if (!chat) {
+                    chat = new Chat({
+                        participants: [data.user, data.toId],
+                        messages: [],
+                    });
+                }
+                chat.messages.push({
+                    senderId: data.user,
+                    text: data.message,
+                });
+                await chat.save();
+                IO.to(ROOM_ID).emit("newMessage", {
+                    id: data.user,
+                    message: data.message,
+                });
+            } catch (error) {
+                Logger.error(error);
+            }
         });
-        if (!chat) {
-          chat = new Chat({
-            participants: [data.user, data.toId],
-            messages: [],
-          });
-        }
-        chat.messages.push({
-          senderId: data.user,
-          text: data.message,
+
+        socket.on("disconnect", (reason) => {
+            Logger.info(`❌ Disconnected: ${socket.id} - ${reason}`);
         });
-        // console.log(chat);
-        await chat.save();
-        IO.to(ROOM_ID).emit("newMessage", {
-          id: data.user,
-          message: data.message,
-        });
-      } catch (error) {
-        Logger.error(error);
-      }
     });
-  });
 
-  return IO;
-};
-
-export const getIo = async () => {
-  if (!IO) throw new Error("Socket.IO not initialized");
-  return IO;
+    return IO;
 };
