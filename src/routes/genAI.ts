@@ -7,8 +7,8 @@ const ROUTER = Router();
 ROUTER.use(userAuth);
 
 ROUTER.post('/generate-bio', asyncHandler(async (req: Request, res: Response) => {
-    const {firstName,lastName,gender,dob} = req.body;
-    const bio = await generateBioPrompt(firstName,lastName,dob,gender)
+    const {firstName,lastName,gender,dob,linkedInUrl,githubUrl} = req.body;
+    const bio = await generateBioPrompt({firstName,lastName,dob,gender,linkedInUrl,githubUrl})
     res.json({bio});
 }));
 

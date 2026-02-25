@@ -5,6 +5,7 @@ import { adminAuth, userAuth } from "../middlewares/auth.js";
 import bcrypt from "bcrypt";
 import { upload } from "../lib/multer.js";
 import { deleteFromCloudinary, uploadToCloudinary } from "../lib/cloudinary.js";
+import { isBirthdayToday } from "../helpers/birthday.js";
 
 const ROUTER = Router();
 ROUTER.use(userAuth);
@@ -52,13 +53,15 @@ ROUTER.post('/change-password', asyncHandler(async (req: Request, res: Response)
 }));
 
 ROUTER.patch('/profile',upload.single('image'),asyncHandler(async (req: Request, res: Response) => {
-    const {firstName,lastName,imageUrl,dob,gender,bio} = req.body;
+    const {firstName,lastName,imageUrl,dob,gender,bio,githubUrl,linkedInUrl} = req.body;
     const updateData: any = {
         firstName,
         lastName,
         bio,
         gender,
         dob,
+        githubUrl,
+        linkedInUrl
     };
     if(new Date(dob) > new Date()) throw new Error("Date of birth cannot be a future date")
     if (req.file) {
@@ -77,6 +80,15 @@ ROUTER.patch('/profile',upload.single('image'),asyncHandler(async (req: Request,
         return res.status(404).send("User not found");
     }
     res.json(USER);
+}));
+
+ROUTER.get('/birthday-today', asyncHandler(async (req: Request, res: Response) => {
+    const USER = await User.findById(req.userId).select("dob").lean();
+    if (!USER) {
+        return res.status(404).send("User not found");
+    }
+    const isBirthday = isBirthdayToday(String(USER.dob));
+    res.json({ isBirthdayToday: isBirthday });
 }));
 
 export const USER_ROUTER = ROUTER;

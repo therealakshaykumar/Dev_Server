@@ -70,6 +70,16 @@ const userSchema = new mongoose.Schema({
         trim: true,
         required: false,
     },
+    githubUrl: {
+        type: String,
+        trim: true,
+        required: false,
+    },
+    linkedInUrl: {
+        type: String,
+        trim: true,
+        required: false,
+    },
 }, { timestamps: true, });
 
 export const User = mongoose.model('User', userSchema);
