@@ -45,7 +45,6 @@ export const initSocket = async (server: Server) => {
 
         socket.on("sendMessage", async (data) => {
             const ROOM_ID = getRoomID(data.user, data.toId);
-      console.log(data.message);
             try {
                 let chat = await Chat.findOne({
                     participants: { $all: [data.user, data.toId] },
