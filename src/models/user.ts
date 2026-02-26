@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema({
         maxLength: 500,
         required: false,
     },
-    imagePublicId: {
+    imageKey: {
         type: String,
         trim: true,
         required: false,

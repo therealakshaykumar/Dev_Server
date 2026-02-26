@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { upload } from "../lib/multer.js";
 import { deleteFromCloudinary, uploadToCloudinary } from "../lib/cloudinary.js";
 import { isBirthdayToday } from "../helpers/birthday.js";
+import { deleteFromS3, uploadToS3 } from "../lib/aws_s3.js";
 
 const ROUTER = Router();
 ROUTER.use(userAuth);
@@ -67,15 +68,20 @@ ROUTER.patch('/profile',upload.single('image'),asyncHandler(async (req: Request,
     if (req.file) {
         const currentUser = await User.findById(req.userId);
         
-        if (currentUser?.imagePublicId) {
-            await deleteFromCloudinary(currentUser.imagePublicId);
+        if (currentUser?.imageKey) {
+            await deleteFromS3(currentUser.imageKey);
         }
 
-        const { url, publicId } = await uploadToCloudinary(req.file.buffer);
+        const { url, key } = await uploadToS3(
+                req.file.buffer,
+                req.file.originalname,
+                req.file.mimetype
+            );
         updateData.imageUrl = url;
-        updateData.imagePublicId = publicId;
+        updateData.imageKey = key;
     }
     const USER = await User.findByIdAndUpdate(req.userId, updateData, { new: true }).select("-password -__v");
+    console.log(USER)
     if (!USER) {
         return res.status(404).send("User not found");
     }

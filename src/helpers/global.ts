@@ -3,6 +3,8 @@ import { Logger } from "../lib/logger.js";
 import { connectDB } from "../configs/database.js";
 import { initSocket } from "../lib/socket.js";
 import { IncomingMessage, Server, ServerResponse } from "http";
+import { s3Client } from "../lib/aws_s3.js";
+import { ListBucketsCommand } from "@aws-sdk/client-s3";
 
 export const getSlowAPI = async (req: Request, res: Response, next: NextFunction) => {
   const startTime = Date.now();
